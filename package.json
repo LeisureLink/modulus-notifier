@@ -38,7 +38,7 @@
     "good-console": "^5.2.0",
     "hapi": "^11.1.2",
     "hapi-async-handler": "^1.0.3",
-    "hapi-plugin-router": "^1.0.0",
+    "hapi-plugin-router": "^1.1.0",
     "hapi-router": "^3.4.0",
     "hapi-swaggered": "^2.4.1",
     "hapi-swaggered-ui": "^2.1.1",
