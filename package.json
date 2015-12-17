@@ -1,5 +1,6 @@
 {
-  "name": "modulus-slack-notifier",
+  "name": "modulus-notifier",
+  "private": true,
   "version": "1.0.0",
   "description": "Webhook into slack's api for notifications",
   "main": "index.js",
@@ -28,18 +29,10 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
-    "babel-cli": "^6.3.17",
-    "babel-core": "^6.3.17",
-    "babel-polyfill": "^6.3.14",
-    "babel-preset-es2016-node5": "^1.1.2",
-    "babel-preset-stage-0": "^6.3.13",
-    "babel-register": "^6.3.13",
     "blipp": "^2.3.0",
     "bluebird": "^3.0.6",
     "boom": "^3.0.0",
-    "callsite": "^1.0.0",
     "enjoi": "^1.0.1",
-    "glob": "^6.0.1",
     "glue": "^2.4.0",
     "good": "^6.4.0",
     "good-console": "^5.2.0",

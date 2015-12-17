@@ -1,12 +1,6 @@
 'use strict';
 
-//const Fs = require('fs');
-//const Path = require('path');
-//
-//const babelConfiguration = JSON.parse(Fs.readFileSync(Path.join(__dirname, '.babelrc')));
-//babelConfiguration.babel = require('babel-core');
-
-module.exports = (wallaby) => {
+module.exports = () => {
   return {
     files: [
       'test/**/*',
@@ -23,8 +17,5 @@ module.exports = (wallaby) => {
     bootstrap: () => {
       require('./test/helpers');
     }
-    //compilers: {
-    //  '**/*.js': wallaby.compilers.babel(babelConfiguration)
-    //}
   }
 };
