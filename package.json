@@ -9,9 +9,8 @@
     "test": "test"
   },
   "scripts": {
-    "start": "./node_modules/.bin/babel-node app.js",
-    "test": "mocha plugins/**/test/**/*.tests.js",
-    "deploy": "modulus deploy -p modulus-notifier-staging"
+    "start": "node .",
+    "test": "mocha plugins/**/test/**/*.tests.js"
   },
   "repository": {
     "type": "git",
