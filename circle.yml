@@ -5,9 +5,10 @@ machine:
 dependencies:
   post:
     - npm install -g modulus
+    - modulus config set api_uri https://api-leisure-link.mod.ec
 
 deployment:
   production:
     branch: master
     commands:
-      - modulus deploy -p supplier-adaptor-boilerplate
+      - modulus deploy -p modulus-notifier-staging
