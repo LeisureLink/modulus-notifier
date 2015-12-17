@@ -38,6 +38,7 @@ module.exports = {
     }
   },
   handler: (request, reply) => {
-    return reply(request.payload);
+    console.log(request.payload);
+    return reply({ ok: true });
   }
 };
