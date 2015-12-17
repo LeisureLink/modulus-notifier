@@ -1,0 +1,13 @@
+machine:
+  node:
+    version: 5.x
+
+dependencies:
+  post:
+    - npm install -g modulus
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - modulus deploy -p supplier-adaptor-boilerplate

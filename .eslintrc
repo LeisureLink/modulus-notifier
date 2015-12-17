@@ -1,0 +1,17 @@
+{
+  "env": {
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "arrowFunctions": true,
+    "templateStrings": true
+  },
+  "globals": {
+    "expect": true,
+    "hapi": true,
+    "async": true
+  }
+}

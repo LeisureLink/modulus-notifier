@@ -1,0 +1,59 @@
+{
+  "name": "modulus-slack-notifier",
+  "version": "1.0.0",
+  "description": "Webhook into slack's api for notifications",
+  "main": "index.js",
+  "directories": {
+    "plugins": "plugins",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/babel-node app.js",
+    "test": "mocha plugins/**/test/**/*.tests.js",
+    "deploy": "modulus deploy -p modulus-notifier-staging"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeisureLink/modulus-slack-notifier.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeisureLink/modulus-slack-notifier/issues"
+  },
+  "homepage": "https://github.com/LeisureLink/modulus-slack-notifier#readme",
+  "devDependencies": {
+    "code": "^2.0.1",
+    "mocha": "^2.3.4"
+  },
+  "dependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-core": "^6.3.17",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2016-node5": "^1.1.2",
+    "babel-preset-stage-0": "^6.3.13",
+    "babel-register": "^6.3.13",
+    "blipp": "^2.3.0",
+    "bluebird": "^3.0.6",
+    "boom": "^3.0.0",
+    "callsite": "^1.0.0",
+    "enjoi": "^1.0.1",
+    "glob": "^6.0.1",
+    "glue": "^2.4.0",
+    "good": "^6.4.0",
+    "good-console": "^5.2.0",
+    "hapi": "^11.1.2",
+    "hapi-async-handler": "^1.0.3",
+    "hapi-plugin-router": "^1.0.0",
+    "hapi-router": "^3.4.0",
+    "hapi-swaggered": "^2.4.1",
+    "hapi-swaggered-ui": "^2.1.1",
+    "inert": "^3.2.0",
+    "joi": "^7.0.1",
+    "lodash": "^3.10.1",
+    "rejoice": "^2.2.1",
+    "tv": "^5.0.1",
+    "vision": "^4.0.1"
+  }
+}
