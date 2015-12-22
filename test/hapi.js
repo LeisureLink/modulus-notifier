@@ -6,17 +6,13 @@ const _ = require('lodash');
 
 module.exports = {
   setup(plugins) {
-    if (!_.isArray(plugins)) {
-      plugins = [plugins];
-    }
-    plugins = _.flatten([require('hapi-async-handler'), require('hapi-plugin-router'), plugins], true);
+    plugins = _.flattenDeep([require('hapi-async-handler'), require('hapi-plugin-router'), plugins]);
 
     const server = new Hapi.Server();
     server.connection();
     return new Promise((resolve, reject) => {
       server.register(plugins, (err) => {
-        if (err) return reject(err);
-        return resolve(server);
+        return err ? reject(err) : resolve(server);
       });
     });
   }

@@ -27,7 +27,9 @@
     "code": "^2.0.1",
     "eslint": "^1.10.3",
     "eslint-watch": "^2.1.4",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "nock": "^3.5.0",
+    "sinon": "^1.17.2"
   },
   "dependencies": {
     "@leisurelink/authentic-client": "^1.1.0",
