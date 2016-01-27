@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "nodemon .",
+    "start": "node .",
     "test": "mocha plugins/**/test/**/*.tests.js"
   },
   "repository": {
