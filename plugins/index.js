@@ -34,7 +34,8 @@ const manifest = {
         docExpansion: 'list'
       }
     },
-    './hooks': {}
+    './hooks': {},
+    './authentic-client': {}
   }
 };
 
