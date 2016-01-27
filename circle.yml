@@ -1,14 +1,12 @@
 machine:
   node:
     version: 5.2
-
-dependencies:
-  post:
-    - npm install -g modulus
-    - modulus config set api_uri https://api-leisure-link.mod.ec
-
 deployment:
   production:
     branch: master
     commands:
+      - npm install -g modulus
+      - modulus config set api_uri https://api-leisure-link.mod.ec
+      - echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >> ~/$CIRCLE_PROJECT_REPONAME/.npmrc
       - modulus deploy -p modulus-notifier-staging
+      - modulus deploy -p modulus-notifier
