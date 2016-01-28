@@ -37,15 +37,29 @@ module.exports = {
     }
   },
   handler: (req, reply) => {
-    request.get(`${req.payload.project.domain}/healthcheck`, (err, response, body) => {
+    const caller = req.payload.project.domain;
+    req.server.log(['info'], `Removing authentic registration for ${caller}`);
+
+    request.get(`https://${req.payload.project.domain}/healthcheck`, (err, response, body) => {
       if(err) {
+        req.server.log(['error'], err);
         return reply(err);
       }
       let authClient = req.server.plugins['authentic-client'];
+      req.server.log(['info'], `Creating endpoint: ${body.principalId} ${body.keyId}\n${body.key}`);
       return authClient.createEndpointAsync('en-US', body.principalId)
-        .then(() => authClient.addEndpointKeyAsync('en-US', body.principalId, body.keyId, body.key))
-        .then(() => reply({ status: 'OK' }))
-        .catch(reply);
+        .then(() => {
+          req.server.log(['info'], `Creating endpoint key: ${body.principalId} ${body.keyId}\n${body.key}`);
+          authClient.addEndpointKeyAsync('en-US', body.principalId, body.keyId, body.key)
+        })
+        .then(() => {
+          req.server.log(['info'], `Endpoint and endpoint key created`);
+          return reply({ status: 'OK' })
+        })
+        .catch(e => {
+          req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
+          return reply(e);
+        });
     });
   }
 };

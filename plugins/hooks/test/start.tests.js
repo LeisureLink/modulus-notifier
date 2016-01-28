@@ -16,7 +16,7 @@ describe('start', () => {
   };
 
   before(() => {
-    nock('http://webhook-test.com')
+    nock('https://webhook-test.com')
       .get('/healthcheck')
       .reply(200, {
         principalId: 'principalId',
@@ -37,7 +37,7 @@ describe('start', () => {
   it('creates an endpoint on start webhook', done => {
     let payload = {
       project: {
-        domain: 'http://webhook-test.com'
+        domain: 'webhook-test.com'
       }
     };
     server.inject({ method: 'POST', url: '/v1/hooks/start', payload }, () => {
@@ -49,7 +49,7 @@ describe('start', () => {
   it('adds an endpoint key on start webhook', done => {
     let payload = {
       project: {
-        domain: 'http://webhook-test.com'
+        domain: 'webhook-test.com'
       }
     };
     server.inject({ method: 'POST', url: '/v1/hooks/start', payload }, () => {

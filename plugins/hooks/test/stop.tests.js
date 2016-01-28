@@ -14,7 +14,7 @@ describe('start', () => {
   };
 
   before(() => {
-    nock('http://webhook-test.com')
+    nock('https://webhook-test.com')
       .get('/healthcheck')
       .reply(200, {
         principalId: 'principalId',
@@ -35,7 +35,7 @@ describe('start', () => {
   it('deletes an endpoint key on stop webhook', done => {
     let payload = {
       project: {
-        domain: 'http://webhook-test.com'
+        domain: 'webhook-test.com'
       }
     };
     server.inject({ method: 'POST', url: '/v1/hooks/stop', payload }, () => {
