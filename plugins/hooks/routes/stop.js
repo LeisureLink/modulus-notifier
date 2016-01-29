@@ -54,7 +54,7 @@ module.exports = {
       }
       let authClient = req.server.plugins['authentic-client'];
       req.server.log(['info'], `Deleting endpoint key: ${body.principalId} ${body.keyId}\n${body.key}`);
-      return authClient.deleteEndpointKeyAsync('en-US', body.principalId, body.keyId, body.key)
+      return authClient.deleteEndpointKeyAsync('en-US', body.principalId, body.keyId)
         .then(() => {
           req.server.log(['info'], 'Endpoint key deleted');
           return reply({ status: 'OK' });
