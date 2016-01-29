@@ -13,7 +13,7 @@ let plugin = {
     let privateKey = fs.readFileSync(privateKeyfile);
 
     let client = new AuthenticClient(config.authenticUrl, config.keyId, privateKey);
-    server.expose(Promise.promisifyAll(client));
+    server.expose({ client: Promise.promisifyAll(client) });
     next();
   }
 };

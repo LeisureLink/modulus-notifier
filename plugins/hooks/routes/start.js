@@ -58,7 +58,7 @@ module.exports = {
         let principalId = req.payload.project.name;
         let keyId = req.payload.project.id;
 
-        let authClient = req.server.plugins['authentic-client'];
+        let authClient = req.server.plugins['authentic-client'].client;
         req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${body.key}`);
         return authClient.createEndpointAsync('en-US', principalId)
           .then(() => {

@@ -44,7 +44,7 @@ module.exports = {
     let principalId = req.payload.project.name;
     let keyId = req.payload.project.id;
 
-    let authClient = req.server.plugins['authentic-client'];
+    let authClient = req.server.plugins['authentic-client'].client;
     req.server.log(['info'], `Deleting endpoint key: ${principalId}/${keyId}`);
     return authClient.deleteEndpointKeyAsync('en-US', principalId, keyId)
       .then(() => {
@@ -55,7 +55,5 @@ module.exports = {
         req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
         return reply(e);
       });
-
-
   }
 };

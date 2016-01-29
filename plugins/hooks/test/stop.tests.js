@@ -24,7 +24,7 @@ describe('start', () => {
     return hapi.setup([HooksPlugin])
       .then((_server) => {
         server = _server;
-        server.plugins['authentic-client'] = authenticClient;
+        server.plugins['authentic-client'] = { client: authenticClient };
       });
   });
 
