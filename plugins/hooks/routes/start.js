@@ -47,26 +47,33 @@ module.exports = {
     });
     req.server.log(['info'], `Creating authentic registration for ${caller}`);
 
-    request({ url: `https://${caller}/healthcheck`, method: 'GET', agent }, (err, response, body) => {
-      if(err) {
-        req.server.log(['error'], err);
-        return reply(err);
-      }
-      let authClient = req.server.plugins['authentic-client'];
-      req.server.log(['info'], `Creating endpoint: ${body.principalId} ${body.keyId}\n${body.key}`);
-      return authClient.createEndpointAsync('en-US', body.principalId)
-        .then(() => {
-          req.server.log(['info'], `Creating endpoint key: ${body.principalId} ${body.keyId}\n${body.key}`);
-          authClient.addEndpointKeyAsync('en-US', body.principalId, body.keyId, body.key)
-        })
-        .then(() => {
-          req.server.log(['info'], `Endpoint and endpoint key created`);
-          return reply({ status: 'OK' })
-        })
-        .catch(e => {
-          req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
-          return reply(e);
-        });
+    // Timeout used to ensure modulus has finished starting the container before requesting routes.
+    setTimeout(10000, () => {
+      request({ url: `https://${caller}/healthcheck`, method: 'GET', agent }, (err, response, body) => {
+        if(err) {
+          req.server.log(['error'], err);
+          return reply(err);
+        }
+
+        let principalId = req.payload.project.name;
+        let keyId = req.payload.project.id;
+
+        let authClient = req.server.plugins['authentic-client'];
+        req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${body.key}`);
+        return authClient.createEndpointAsync('en-US', principalId)
+          .then(() => {
+            req.server.log(['info'], `Creating endpoint key: ${principalId} ${keyId}\n${body.key}`);
+            authClient.addEndpointKeyAsync('en-US', principalId, keyId, body.key)
+          })
+          .then(() => {
+            req.server.log(['info'], `Endpoint and endpoint key created`);
+            return reply({ status: 'OK' })
+          })
+          .catch(e => {
+            req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
+            return reply(e);
+          });
+      });
     });
   }
 };

@@ -39,30 +39,23 @@ module.exports = {
   },
   handler: (req, reply) => {
     const caller = req.payload.project.domain;
-    const agent = new https.Agent({
-      host: caller,
-      port: 443,
-      path: '/',
-      rejectUnauthorized: false
-    });
     req.server.log(['info'], `Removing authentic registration for ${caller}`);
 
-    request({ url: `https://${caller}/healthcheck`, method: 'GET', agent }, (err, response, body) => {
-      if(err) {
-        req.server.log(['error'], err);
-        return reply(err);
-      }
-      let authClient = req.server.plugins['authentic-client'];
-      req.server.log(['info'], `Deleting endpoint key: ${body.principalId} ${body.keyId}\n${body.key}`);
-      return authClient.deleteEndpointKeyAsync('en-US', body.principalId, body.keyId)
-        .then(() => {
-          req.server.log(['info'], 'Endpoint key deleted');
-          return reply({ status: 'OK' });
-        })
-        .catch(e => {
-          req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
-          return reply(e);
-        });
-    });
+    let principalId = req.payload.project.name;
+    let keyId = req.payload.project.id;
+
+    let authClient = req.server.plugins['authentic-client'];
+    req.server.log(['info'], `Deleting endpoint key: ${principalId}/${keyId}`);
+    return authClient.deleteEndpointKeyAsync('en-US', principalId, keyId)
+      .then(() => {
+        req.server.log(['info'], 'Endpoint key deleted');
+        return reply({ status: 'OK' });
+      })
+      .catch(e => {
+        req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
+        return reply(e);
+      });
+
+
   }
 };
