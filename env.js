@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-process.env.WAIT_TIMEOUT = 10;
+process.env.WAIT_TIMEOUT = process.env.WAIT_TIMEOUT || 10000;
 
 module.exports = {
   authenticUrl: process.env.MODULUS_NOTIFIER_AUTHENTIC_URL || 'http://authentic-api.leisurelink.ka/',
