@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const request = require('request');
+const https = require('https');
 
 module.exports = {
   path: '/v1/hooks/start',
@@ -38,9 +39,15 @@ module.exports = {
   },
   handler: (req, reply) => {
     const caller = req.payload.project.domain;
-    req.server.log(['info'], `Removing authentic registration for ${caller}`);
+    const agent = new https.Agent({
+      host: caller,
+      port: 443,
+      path: '/',
+      rejectUnauthorized: false
+    });
+    req.server.log(['info'], `Creating authentic registration for ${caller}`);
 
-    request.get(`https://${req.payload.project.domain}/healthcheck`, (err, response, body) => {
+    request({ url: `https://${caller}/healthcheck`, method: 'GET', agent }, (err, response, body) => {
       if(err) {
         req.server.log(['error'], err);
         return reply(err);
