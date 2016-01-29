@@ -48,7 +48,7 @@ module.exports = {
     req.server.log(['info'], `Creating authentic registration for ${caller}`);
 
     // Timeout used to ensure modulus has finished starting the container before requesting routes.
-    setTimeout(10000, () => {
+    setTimeout(() => {
       request({ url: `https://${caller}/healthcheck`, method: 'GET', agent }, (err, response, body) => {
         if(err) {
           req.server.log(['error'], err);
@@ -74,6 +74,6 @@ module.exports = {
             return reply(e);
           });
       });
-    });
+    }, process.env.WAIT_TIMEOUT);
   }
 };

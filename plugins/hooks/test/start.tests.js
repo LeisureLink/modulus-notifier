@@ -16,6 +16,7 @@ describe('start', () => {
   };
 
   before(() => {
+    process.env.WAIT_TIMEOUT = 0;
     nock('https://webhook-test.com')
       .get('/healthcheck')
       .reply(200, {
