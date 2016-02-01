@@ -9,6 +9,6 @@ deployment:
       - modulus config set api_uri https://api-leisure-link.mod.ec
       - echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >> ~/$CIRCLE_PROJECT_REPONAME/.npmrc
       - modulus deploy -p modulus-notifier-staging
-      - echo "$PRIVATE_KEY" > ~/$CIRCLE_PROJECT_REPONAME/modulus-notifier.pem
+      - echo "$PRIVATE_KEY" | tr ":" "\n" > ~/$CIRCLE_PROJECT_REPONAME/modulus-notifier.pem
       - openssl rsa -pubout -in ~/$CIRCLE_PROJECT_REPONAME/modulus-notifier.pem -out ~/$CIRCLE_PROJECT_REPONAME/modulus-notifier.pub
       - modulus deploy -p modulus-notifier
