@@ -43,15 +43,12 @@ module.exports = {
 
     // Timeout used to ensure modulus has finished starting the container before requesting routes.
     setTimeout(() => {
-      Wreck.get(`https://${caller}/healthcheck`, { rejectUnauthorized: false }, (err, response, payload) => {
+      Wreck.get(`https://${caller}/healthcheck`, { rejectUnauthorized: false, json: true }, (err, response, payload) => {
 
         if(err) {
           req.server.log(['error'], err);
           return reply(err);
         }
-
-        req.server.log(['debug', 'respopnse'], response);
-        req.server.log(['debug', 'payload'], payload);
 
         let principalId = req.payload.project.name;
         let keyId = req.payload.project.id;
@@ -60,7 +57,7 @@ module.exports = {
         req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${payload.key}`);
         return authClient.createEndpointAsync('en-US', principalId)
           .then(() => {
-            req.server.log(['info'], `Creating endpoint key: ${principalId} ${keyId}\n${payload.key}`);
+            req.server.log(['info'], 'Creating endpoint key');
             return authClient.addEndpointKeyAsync('en-US', principalId, keyId, payload.key);
           })
           .then(() => {
