@@ -20,18 +20,18 @@ module.exports = {
           500: {
             description: 'Internal Server Error',
             schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
+                                 statusCode: Joi.number(),
+                                 error: Joi.string(),
+                                 message: Joi.string()
+                               })
           },
           503: {
             description: 'Server Timeout',
             schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
+                                 statusCode: Joi.number(),
+                                 error: Joi.string(),
+                                 message: Joi.string()
+                               })
           }
         }
       }
@@ -39,48 +39,40 @@ module.exports = {
   },
   handler: (req, reply) => {
     const caller = req.payload.project.domain;
-    const agent = new https.Agent({
-      host: caller,
-      port: 443,
-      path: '/',
-      rejectUnauthorized: false
-    });
     req.server.log(['info'], `Creating authentic registration for ${caller}`);
 
     // Timeout used to ensure modulus has finished starting the container before requesting routes.
     setTimeout(() => {
-      Wreck.request('GET', `https://${caller}/healthcheck`, { rejectUnauthorized: false }, (err, response) => {
+      Wreck.get(`https://${caller}/healthcheck`, { rejectUnauthorized: false }, (err, response, payload) => {
+
         if(err) {
           req.server.log(['error'], err);
           return reply(err);
         }
 
-        Wreck.read(response, null, (e, body) =>{
-          if(e) {
-            req.server.log(['error'], e);
-            return reply(e);
-          }
-          let principalId = req.payload.project.name;
-          let keyId = req.payload.project.id;
+        req.server.log(['debug', 'respopnse'], response);
+        req.server.log(['debug', 'payload'], payload);
 
-          let authClient = req.server.plugins['authentic-client'].client;
-          req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${body.key}`);
-          return authClient.createEndpointAsync('en-US', principalId)
-            .then(() => {
-              req.server.log(['info'], `Creating endpoint key: ${principalId} ${keyId}\n${body.key}`);
-              authClient.addEndpointKeyAsync('en-US', principalId, keyId, body.key)
-            })
-            .then(() => {
-              req.server.log(['info'], `Endpoint and endpoint key created`);
-              return reply({ status: 'OK' })
-            })
-            .catch(e => {
-              req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
-              return reply(e);
-            });
-        });
+        let principalId = req.payload.project.name;
+        let keyId = req.payload.project.id;
 
+        let authClient = req.server.plugins['authentic-client'].client;
+        req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${payload.key}`);
+        return authClient.createEndpointAsync('en-US', principalId)
+          .then(() => {
+            req.server.log(['info'], `Creating endpoint key: ${principalId} ${keyId}\n${payload.key}`);
+            return authClient.addEndpointKeyAsync('en-US', principalId, keyId, payload.key);
+          })
+          .then(() => {
+            req.server.log(['info'], `Endpoint and endpoint key created`);
+            return reply({ status: 'OK' });
+          })
+          .catch(ex => {
+            req.server.log(['error'], `Error while deleting endpoint key ${ex.stack}`);
+            return reply(ex);
+          });
       });
-    }, process.env.WAIT_TIMEOUT);
-  }
+    });
+  }, process.env.WAIT_TIMEOUT);
+}
 };
