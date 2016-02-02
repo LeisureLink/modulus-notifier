@@ -72,7 +72,6 @@ module.exports = {
             return reply(ex);
           });
       });
-    });
-  }, process.env.WAIT_TIMEOUT);
-}
+    }, process.env.WAIT_TIMEOUT);
+  }
 };
