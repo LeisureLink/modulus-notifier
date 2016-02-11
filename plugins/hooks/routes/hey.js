@@ -17,7 +17,6 @@ module.exports = {
   },
   handler: (req, reply) => {
     req.server.log(['info'], util.inspect(req.payload, { showHidden: true, depth: null, colors: true }));
-    req.server.log(['debug'], req.query.routePrefix);
     const url = `https://something.mod.evc${req.query.routePrefix ? `/${req.query.routePrefix}` : ''}/healthcheck`;
     req.server.log(['debug'], url);
     return reply();
