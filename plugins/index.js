@@ -3,7 +3,7 @@
 const Promise = require('bluebird');
 const Glue = require('glue');
 const manifest = {
-  connections: [{ port: process.env.PORT }],
+  connections: [{ port: process.env.PORT || 55000 }],
   plugins: {
     'inert': {},
     'vision': {},
