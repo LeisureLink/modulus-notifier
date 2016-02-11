@@ -10,6 +10,11 @@ module.exports = {
   config: {
     description: 'Webhook endpoint for the start event',
     tags: ['api', 'v1', 'start'],
+    validate: {
+      query: {
+        routePrefix: Joi.string().regex(/[a-z]+/i)
+      }
+    },
     plugins: {
       'hapi-swaggered': {
         responses: {
@@ -43,7 +48,8 @@ module.exports = {
 
     // Timeout used to ensure modulus has finished starting the container before requesting routes.
     setTimeout(() => {
-      Wreck.get(`https://${caller}/healthcheck`, { rejectUnauthorized: false, json: true }, (err, response, payload) => {
+      const url = `https://${caller}${req.query.routePrefix ? `/${req.query.routePrefix}` : ''}/healthcheck`;
+      Wreck.get(url, { rejectUnauthorized: false, json: true }, (err, response, payload) => {
 
         if(err) {
           req.server.log(['error'], err);
