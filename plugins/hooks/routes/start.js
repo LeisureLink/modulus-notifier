@@ -12,7 +12,7 @@ module.exports = {
     tags: ['api', 'v1', 'start'],
     validate: {
       query: {
-        routePrefix: Joi.string().regex(/[a-z]+/i)
+        routePrefix: Joi.string().regex(/[a-z-]+/i)
       }
     },
     plugins: {

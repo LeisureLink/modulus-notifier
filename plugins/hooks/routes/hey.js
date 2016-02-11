@@ -11,7 +11,7 @@ module.exports = {
     tags: ['api'],
     validate: {
       query: {
-        routePrefix: Joi.string().regex(/[a-z]+/i)
+        routePrefix: Joi.string().regex(/[a-z-]+/i)
       }
     },
   },
