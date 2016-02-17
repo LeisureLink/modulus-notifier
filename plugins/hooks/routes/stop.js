@@ -1,8 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
-const request = require('request');
-const https = require('https');
+
+const controllerFunc = require('../controller');
 
 module.exports = {
   path: '/v1/hooks/stop',
@@ -39,20 +39,19 @@ module.exports = {
   },
   handler: (req, reply) => {
     const caller = req.payload.project.domain;
-    req.server.log(['info'], `Removing authentic registration for ${caller}`);
-
+    const authClient = req.server.plugins['authentic-client'].client;
+    const controller = controllerFunc(authClient, req);
     let principalId = req.payload.project.name;
     let keyId = req.payload.project.id;
 
-    let authClient = req.server.plugins['authentic-client'].client;
-    req.server.log(['info'], `Deleting endpoint key: ${principalId}/${keyId}`);
-    return authClient.deleteEndpointKeyAsync('en-US', principalId, keyId)
+    req.log(['info'], `Removing authentic registration for ${caller}`);
+    return controller.unregisterApplication(principalId, keyId)
       .then(() => {
-        req.server.log(['info'], 'Endpoint key deleted');
+        req.log(['info'], 'Endpoint key deleted');
         return reply({ status: 'OK' });
       })
       .catch(e => {
-        req.server.log(['error'], `Error while deleting endpoint key ${e.stack}`);
+        req.log(['error'], `Error while deleting endpoint key ${e.stack}`);
         return reply(e);
       });
   }

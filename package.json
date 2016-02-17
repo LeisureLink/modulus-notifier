@@ -42,7 +42,7 @@
     "glue": "^2",
     "good": "^6.4.0",
     "good-console": "^5.3.0",
-    "hapi": "^11",
+    "hapi": "^13",
     "hapi-async-handler": "^1.0.3",
     "hapi-plugin-router": "^1.1.1",
     "hapi-router": "^3.4.0",
