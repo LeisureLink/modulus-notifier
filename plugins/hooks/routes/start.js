@@ -16,31 +16,8 @@ module.exports = {
         routePrefix: Joi.string().regex(/[a-z-]+/i)
       }
     },
-    plugins: {
-      'hapi-swaggered': {
-        responses: {
-          default: {
-            description: 'OK',
-            schema: Joi.object({ status: 'OK' })
-          },
-          500: {
-            description: 'Internal Server Error',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          },
-          503: {
-            description: 'Server Timeout',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          }
-        }
-      }
+    response: {
+      schema: Joi.object({ status: 'OK' })
     }
   },
   handler: (req, reply) => {
@@ -57,7 +34,7 @@ module.exports = {
         return reply({ status: 'OK' });
       })
       .catch(e => {
-        console.log(['error'], 'Error while adding endpoint\n$', e.stack);
+        req.log(['error'], `Error while adding endpoint ${e.stack}`);
         return reply(Boom.wrap(e));
       });
   }

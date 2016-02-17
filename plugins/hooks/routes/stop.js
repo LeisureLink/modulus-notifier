@@ -11,31 +11,8 @@ module.exports = {
   config: {
     description: 'Webhook endpoint for the stop event',
     tags: ['api', 'v1', 'stop'],
-    plugins: {
-      'hapi-swaggered': {
-        responses: {
-          default: {
-            description: 'OK',
-            schema: Joi.object({ status: 'OK' })
-          },
-          500: {
-            description: 'Internal Server Error',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          },
-          503: {
-            description: 'Server Timeout',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          }
-        }
-      }
+    response: {
+      schema: Joi.object({ status: 'OK' })
     }
   },
   handler: (req, reply) => {
