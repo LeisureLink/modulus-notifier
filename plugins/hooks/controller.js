@@ -1,4 +1,5 @@
 const Promise = require('bluebird');
+const util = require('util');
 const Wreck = require('wreck');
 
 module.exports = (authClient, logger) => {
@@ -11,7 +12,7 @@ module.exports = (authClient, logger) => {
           if(err) {
             return reject(err);
           }
-          logger.log(['info'], `Got payload ${payload}`);
+          logger.log(['info'], `Got payload ${util.inspect(payload)}`);
           return resolve(payload);
         });
       });

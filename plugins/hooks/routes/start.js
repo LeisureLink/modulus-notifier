@@ -2,7 +2,6 @@
 
 const Boom = require('boom');
 const Joi = require('joi');
-const Promise = require('bluebird');
 
 const controllerFunc = require('../controller');
 

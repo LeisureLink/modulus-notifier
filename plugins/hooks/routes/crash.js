@@ -6,36 +6,13 @@ const Joi = require('joi');
 const controllerFunc = require('../controller');
 
 module.exports = {
-  path: '/v1/hooks/stop',
+  path: '/v1/hooks/crash',
   method: 'POST',
   config: {
-    description: 'Webhook endpoint for the stop event',
-    tags: ['api', 'v1', 'stop'],
-    plugins: {
-      'hapi-swaggered': {
-        responses: {
-          default: {
-            description: 'OK',
-            schema: Joi.object({ status: 'OK' })
-          },
-          500: {
-            description: 'Internal Server Error',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          },
-          503: {
-            description: 'Server Timeout',
-            schema: Joi.object({
-              statusCode: Joi.number(),
-              error: Joi.string(),
-              message: Joi.string()
-            })
-          }
-        }
-      }
+    description: 'Webhook endpoint for the crash event',
+    tags: ['api', 'v1', 'crash'],
+    response: {
+      schema: Joi.object({ status: 'OK' })
     }
   },
   handler: (req, reply) => {
