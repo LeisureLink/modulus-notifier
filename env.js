@@ -2,6 +2,7 @@
 
 const path = require('path');
 
+// Because modulus fires the start event hook long before the application is actually started, we need a way to wait for the application to start up.
 process.env.WAIT_TIMEOUT = process.env.WAIT_TIMEOUT || 10000;
 
 module.exports = {

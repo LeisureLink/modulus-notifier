@@ -10,7 +10,7 @@ describe('start', () => {
   let server;
   const createEndpointSpy = sinon.spy((lang, principalId) => Promise.resolve());
   const addEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
-  let authenticClient = {
+  const authenticClient = {
     createEndpointAsync: createEndpointSpy,
     addEndpointKeyAsync: addEndpointKeySpy
   };
@@ -37,7 +37,7 @@ describe('start', () => {
   });
 
   it('creates an endpoint on start webhook', () => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',
@@ -51,7 +51,7 @@ describe('start', () => {
   });
 
   it('adds an endpoint key on start webhook', () => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',

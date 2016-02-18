@@ -24,8 +24,8 @@ module.exports = {
     const caller = req.payload.project.domain;
     const authClient = req.server.plugins['authentic-client'].client;
     const controller = controllerFunc(authClient, req);
-    let principalId = req.payload.project.name;
-    let keyId = req.payload.project.id;
+    const principalId = req.payload.project.name;
+    const keyId = req.payload.project.id;
 
     req.log(['info'], `Re-adding authentic registration for ${caller}`);
     return controller.unregisterApplication(principalId, keyId)

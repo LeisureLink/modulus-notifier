@@ -9,7 +9,7 @@ describe('stop', () => {
 
   let server;
   const deleteEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
-  let authenticClient = {
+  const authenticClient = {
     deleteEndpointKeyAsync: deleteEndpointKeySpy
   };
 
@@ -21,20 +21,12 @@ describe('stop', () => {
       });
   });
 
-  beforeEach(() => {
-    nock('https://webhook-test.com')
-      .get('/healthcheck')
-      .reply(200, {
-        key: 'key'
-      });
-  });
-
   after((done) => {
     server.stop(done);
   });
 
   it('deletes an endpoint key on stop webhook', done => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',

@@ -11,7 +11,7 @@ describe('restart', () => {
   const deleteEndpointKeySpy = sinon.spy((lang, principalId, keyId) => Promise.resolve());
   const createEndpointSpy = sinon.spy((lang, principalId) => Promise.resolve());
   const addEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
-  let authenticClient = {
+  const authenticClient = {
     deleteEndpointKeyAsync: deleteEndpointKeySpy,
     createEndpointAsync: createEndpointSpy,
     addEndpointKeyAsync: addEndpointKeySpy
@@ -39,7 +39,7 @@ describe('restart', () => {
   });
 
   it('deletes the existing endpoint key on restart webhook', () => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',
@@ -54,7 +54,7 @@ describe('restart', () => {
   });
 
   it('creates an endpoint on restart webhook', () => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',
@@ -68,7 +68,7 @@ describe('restart', () => {
   });
 
   it('adds an endpoint key on restart webhook', () => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',

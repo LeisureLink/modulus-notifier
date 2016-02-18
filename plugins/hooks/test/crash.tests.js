@@ -9,7 +9,7 @@ describe('crash', () => {
 
   let server;
   const deleteEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
-  let authenticClient = {
+  const authenticClient = {
     deleteEndpointKeyAsync: deleteEndpointKeySpy
   };
 
@@ -34,7 +34,7 @@ describe('crash', () => {
   });
 
   it('deletes an endpoint key on crash webhook', done => {
-    let payload = {
+    const payload = {
       project: {
         id: 'keyId',
         name: 'principalId',
