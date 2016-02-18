@@ -5,12 +5,14 @@ const nock = require('nock');
 const sinon = require('sinon');
 const HooksPlugin = require('../');
 
-describe('start', () => {
+describe('restart', () => {
 
   let server;
+  const deleteEndpointKeySpy = sinon.spy((lang, principalId, keyId) => Promise.resolve());
   const createEndpointSpy = sinon.spy((lang, principalId) => Promise.resolve());
   const addEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
   const authenticClient = {
+    deleteEndpointKeyAsync: deleteEndpointKeySpy,
     createEndpointAsync: createEndpointSpy,
     addEndpointKeyAsync: addEndpointKeySpy
   };
@@ -36,7 +38,7 @@ describe('start', () => {
     server.stop(done);
   });
 
-  it('creates an endpoint on start webhook', () => {
+  it('deletes the existing endpoint key on restart webhook', () => {
     const payload = {
       project: {
         id: 'keyId',
@@ -44,13 +46,28 @@ describe('start', () => {
         domain: 'webhook-test.com'
       }
     };
-    return server.inject({ method: 'POST', url: '/v1/hooks/start', payload }).then(response => {
+
+    return server.inject({ method: 'POST', url: '/v1/hooks/restart', payload }).then(response => {
+      expect(response.statusCode).to.equal(200);
+      expect(deleteEndpointKeySpy.calledWith('en-US', 'principalId', 'keyId')).to.be.true();
+    });
+  });
+
+  it('creates an endpoint on restart webhook', () => {
+    const payload = {
+      project: {
+        id: 'keyId',
+        name: 'principalId',
+        domain: 'webhook-test.com'
+      }
+    };
+    return server.inject({ method: 'POST', url: '/v1/hooks/restart', payload }).then(response => {
       expect(response.statusCode).to.equal(200);
       expect(createEndpointSpy.calledWith('en-US', 'principalId')).to.be.true();
     });
   });
 
-  it('adds an endpoint key on start webhook', () => {
+  it('adds an endpoint key on restart webhook', () => {
     const payload = {
       project: {
         id: 'keyId',
@@ -58,7 +75,7 @@ describe('start', () => {
         domain: 'webhook-test.com'
       }
     };
-    return server.inject({ method: 'POST', url: '/v1/hooks/start', payload }).then(response => {
+    return server.inject({ method: 'POST', url: '/v1/hooks/restart', payload }).then(response => {
       expect(response.statusCode).to.equal(200);
       expect(addEndpointKeySpy.calledWith('en-US', 'principalId', 'keyId', 'key')).to.be.true();
     });

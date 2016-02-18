@@ -5,7 +5,7 @@ const nock = require('nock');
 const sinon = require('sinon');
 const HooksPlugin = require('../');
 
-describe('stop', () => {
+describe('crash', () => {
 
   let server;
   const deleteEndpointKeySpy = sinon.spy((lang, principalId, keyId, key) => Promise.resolve());
@@ -21,11 +21,19 @@ describe('stop', () => {
       });
   });
 
+  beforeEach(() => {
+    nock('https://webhook-test.com')
+      .get('/healthcheck')
+      .reply(200, {
+        key: 'key'
+      });
+  });
+
   after((done) => {
     server.stop(done);
   });
 
-  it('deletes an endpoint key on stop webhook', done => {
+  it('deletes an endpoint key on crash webhook', done => {
     const payload = {
       project: {
         id: 'keyId',
@@ -33,7 +41,7 @@ describe('stop', () => {
         domain: 'webhook-test.com'
       }
     };
-    server.inject({ method: 'POST', url: '/v1/hooks/stop', payload }, () => {
+    server.inject({ method: 'POST', url: '/v1/hooks/crash', payload }, () => {
       expect(deleteEndpointKeySpy.calledWith('en-US', 'principalId', 'keyId')).to.be.true();
       done();
     });

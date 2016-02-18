@@ -1,10 +1,12 @@
 # Modulus Notifier
 
-The notifier handles modulus application events via a webhook. This project aims to handle notifying the appropriate systems when these application lifecyle events occur.  For more information regarding the examples of the events that are fired see [WebHook Notifications](http://help.modulus.io/customer/portal/articles/1701214?__hstc=40052093.a67061850636e4ab07e96a8818fa5cfa.1449872233220.1450358159615.1450364774068.14&__hssc=40052093.5.1450364774068&__hsfp=119500312&_ga=1.1216625.1553438681.1449872232)
+The notifier handles modulus application events via a webhook. This project aims to handle notifying the appropriate systems when these application lifecycle events occur.
+For more information regarding the examples of the events that are fired see [WebHook Notifications](http://help.modulus.io/customer/portal/articles/1701214webhook-notifications)
+For more information regarding the events fired from modulus see [Project Notifications](https://help.modulus.io/customer/en_us/portal/articles/1701205-project-notifications)
 
 ## Notifications from Modulus
 
-Events are fired for each of the following application lifecyle events.  
+Events are fired for each of the following application lifecyle events.
 
 * All
 * Crash
@@ -115,7 +117,7 @@ The data structure looks similar to these objects.
 
 ### Authentic
 
-Applications will self subscribe, and remove their keys when the application is decomissioned.
+Applications will self subscribe, and remove their keys when the application is decommissioned.
 
 ### Slack
 

@@ -1,8 +1,9 @@
 'use strict';
 
+const Boom = require('boom');
 const Joi = require('joi');
-const Wreck = require('wreck');
-const https = require('https');
+
+const controllerFunc = require('../controller');
 
 module.exports = {
   path: '/v1/hooks/start',
@@ -15,66 +16,26 @@ module.exports = {
         routePrefix: Joi.string().regex(/[a-z-]+/i)
       }
     },
-    plugins: {
-      'hapi-swaggered': {
-        responses: {
-          default: {
-            description: 'OK',
-            schema: Joi.object({ status: 'OK' })
-          },
-          500: {
-            description: 'Internal Server Error',
-            schema: Joi.object({
-                                 statusCode: Joi.number(),
-                                 error: Joi.string(),
-                                 message: Joi.string()
-                               })
-          },
-          503: {
-            description: 'Server Timeout',
-            schema: Joi.object({
-                                 statusCode: Joi.number(),
-                                 error: Joi.string(),
-                                 message: Joi.string()
-                               })
-          }
-        }
-      }
+    response: {
+      schema: Joi.object({ status: 'OK' })
     }
   },
   handler: (req, reply) => {
     const caller = req.payload.project.domain;
-    req.server.log(['info'], `Creating authentic registration for ${caller}`);
+    const authClient = req.server.plugins['authentic-client'].client;
+    const controller = controllerFunc(authClient, req);
+    const principalId = req.payload.project.name;
+    const keyId = req.payload.project.id;
 
-    // Timeout used to ensure modulus has finished starting the container before requesting routes.
-    setTimeout(() => {
-      const url = `https://${caller}${req.query.routePrefix ? `/${req.query.routePrefix}` : ''}/healthcheck`;
-      Wreck.get(url, { rejectUnauthorized: false, json: true }, (err, response, payload) => {
-
-        if(err) {
-          req.server.log(['error'], err);
-          return reply(err);
-        }
-
-        let principalId = req.payload.project.name;
-        let keyId = req.payload.project.id;
-
-        let authClient = req.server.plugins['authentic-client'].client;
-        req.server.log(['info'], `Creating endpoint: ${principalId} ${keyId}\n${payload.key}`);
-        return authClient.createEndpointAsync('en-US', principalId)
-          .then(() => {
-            req.server.log(['info'], 'Creating endpoint key');
-            return authClient.addEndpointKeyAsync('en-US', principalId, keyId, payload.key);
-          })
-          .then(() => {
-            req.server.log(['info'], `Endpoint and endpoint key created`);
-            return reply({ status: 'OK' });
-          })
-          .catch(ex => {
-            req.server.log(['error'], `Error while deleting endpoint key ${ex.stack}`);
-            return reply(ex);
-          });
+    req.log(['info'], `Creating authentic registration for ${caller}`);
+    return controller.addApplication(caller, req.query.routePrefix, principalId, keyId)
+      .then(() => {
+        req.log(['info'], 'Endpoint and endpoint key created');
+        return reply({ status: 'OK' });
+      })
+      .catch(e => {
+        req.log(['error'], `Error while adding endpoint ${e.stack}`);
+        return reply(Boom.wrap(e));
       });
-    }, process.env.WAIT_TIMEOUT);
   }
 };
